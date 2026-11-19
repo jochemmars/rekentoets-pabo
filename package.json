@@ -15,7 +15,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "golden:maak": "node tests/golden/maak-golden.ts"
+    "golden:bijwerken": "GOLDEN_BIJWERKEN=1 vitest run tests/golden",
+    "golden:uit-oude-versie": "node tests/golden/maak-golden.ts"
   },
   "engines": {
     "node": ">=22"

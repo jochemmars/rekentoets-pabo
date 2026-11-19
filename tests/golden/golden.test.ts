@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { bouwEngine, bouwOpgaven, VASTE_TIJD, type GoldenApi } from './bouw.ts';
+import { bouwEngine, bouwGolden, bouwOpgaven, VASTE_TIJD, type GoldenApi } from './bouw.ts';
 
 interface Golden {
   opgaven: Record<string, unknown>;
@@ -15,7 +15,16 @@ beforeAll(async () => {
   api = (await import('../../src/kern.ts')).RWT as GoldenApi;
 });
 
-describe('golden master', () => {
+const BIJWERKEN = !!process.env.GOLDEN_BIJWERKEN;
+
+// npm run golden:bijwerken schrijft golden.json opnieuw met de huidige code (alleen bij een bewuste wijziging)
+describe.runIf(BIJWERKEN)('golden master bijwerken', () => {
+  it('schrijft golden.json', () => {
+    writeFileSync(new URL('./golden.json', import.meta.url), JSON.stringify(bouwGolden(api), null, 1) + '\n');
+  });
+});
+
+describe.skipIf(BIJWERKEN)('golden master', () => {
   it('heeft dezelfde 107 opgavetypes in dezelfde volgorde', () => {
     const ids = [...new Set(Object.keys(golden.opgaven).map((k) => k.split('|')[0]))];
     expect(api.TPL.map((t) => t.id)).toEqual(ids);

@@ -46,3 +46,38 @@ Stop je halverwege een toets, dan kun je later verder waar je was. De klok staat
 
 - **iPhone:** open de link in Safari, tik op de deelknop en kies **Zet op beginscherm**.
 - **Android:** open de link in Chrome, tik op het menu (drie puntjes) en kies **Toevoegen aan startscherm**.
+
+## Voor ontwikkelaars
+
+De app is geschreven in TypeScript (strict) met Vite, zonder framework. Alles draait in de browser; er is geen server.
+
+```bash
+npm ci            # pakketten installeren (Node 22 of nieuwer)
+npm run dev       # ontwikkelserver met direct herladen
+npm test          # golden master en unit tests (Vitest)
+npm run e2e       # de hele flow in Chromium (Playwright); lokaal kan PW_CHROME=/usr/bin/google-chrome
+npm run lint      # ESLint
+npm run build     # typecheck en productie-build in dist/
+```
+
+### Mappen
+
+| Map            | Inhoud                                                                                  |
+| -------------- | --------------------------------------------------------------------------------------- |
+| `src/core`     | types, toevalsgetallen met seed, rekenen, Nederlandse notatie, opbouw van opgaven       |
+| `src/figuren`  | SVG-figuren: grafieken, getallenlijn, klok, kaart, meetkunde, meten, patronen, tabellen |
+| `src/banken`   | de 107 opgavetypes, per domein en per onderdeel (hoofdrekenen / niet-hoofdrekenen)      |
+| `src/engine`   | toetsopbouw, adaptieve niveaukeuze, nakijken, score en uitslag                          |
+| `src/app`      | de schermen (`views/`), de rekenmachine, toestand, opslag in de browser en de bediening |
+| `src/styles`   | CSS: tokens (licht en donker), basis, componenten, toets, uitslag, figuren              |
+| `tests/golden` | golden master: legt de uitvoer van alle opgavetypes en de engine vast                   |
+| `tests/unit`   | unit tests                                                                              |
+| `tests/e2e`    | Playwright: de hele flow in licht en donker, op 390 en 1280 pixels breed                |
+
+### Golden master
+
+`tests/golden/golden.json` bevat de uitvoer van alle opgavetypes op drie niveaus met vaste seeds, plus gesimuleerde proeftoetsen en oefenrondes. Het is gemaakt uit de oude versie van één bestand (`npm run golden:uit-oude-versie`). Verandert een opgave bewust, werk het bestand dan bij met `npm run golden:bijwerken` en controleer het verschil in de diff voordat je het commit.
+
+### Publiceren
+
+Elke push naar `main` draait alle controles (`.github/workflows/ci.yml`) en zet daarna de build op GitHub Pages (`deploy.yml`). Een branch of pull request krijgt alleen de controles.

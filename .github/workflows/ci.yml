@@ -2,11 +2,13 @@ name: CI
 
 on:
   push:
-    branches: ['**']
+    # main wordt gecontroleerd door deploy.yml, die deze workflow aanroept
+    branches-ignore: [main]
   pull_request:
+  workflow_call:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
