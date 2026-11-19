@@ -230,3 +230,55 @@ export function cyl(dl: string, hl: string): string {
   s += ln(cx - rx, y0, cx + rx, y0, 'fg-thin') + tx(cx, y0 - 20, dl, 'ft-dim', 'middle') + tx(cx + rx + 10, y0 + h / 2 + 6, hl, 'ft-dim');
   return svg(320, y0 + h + 28, s, 'Cilinder');
 }
+
+export interface HuisOpties {
+  /** breedte */
+  w: number;
+  /** hoogte van de rechthoek */
+  h: number;
+  /** hoogte van de driehoek */
+  t: number;
+  unit?: string;
+  /** toon de totale hoogte in plaats van de hoogte van de driehoek */
+  total?: number;
+}
+/** gevel: rechthoek met een driehoek erop */
+export function house(o: HuisOpties): string {
+  const sc = Math.min(150 / o.w, 130 / (o.h + o.t)),
+    W = o.w * sc,
+    H = o.h * sc,
+    T = o.t * sc,
+    x0 = 90,
+    y0 = 14,
+    u = o.unit ? NB + o.unit : '';
+  let s =
+    '<path class="fg-shape" d="M' +
+    x0 +
+    ',' +
+    c2(y0 + T) +
+    ' L' +
+    c2(x0 + W / 2) +
+    ',' +
+    y0 +
+    ' L' +
+    c2(x0 + W) +
+    ',' +
+    c2(y0 + T) +
+    ' V' +
+    c2(y0 + T + H) +
+    ' H' +
+    x0 +
+    ' Z"/>' +
+    ln(x0, y0 + T, x0 + W, y0 + T, 'fg-dash');
+  s +=
+    tx(c2(x0 + W / 2), c2(y0 + T + H + 19), nf(o.w) + u, 'ft-dim', 'middle') +
+    tx(x0 - 8, c2(y0 + T + H / 2 + 4), nf(o.h) + u, 'ft-dim', 'end');
+  if (o.total)
+    s +=
+      ln(x0 + W + 16, y0, x0 + W + 16, y0 + T + H, 'fg-thin') +
+      ln(x0 + W + 11, y0, x0 + W + 21, y0, 'fg-thin') +
+      ln(x0 + W + 11, y0 + T + H, x0 + W + 21, y0 + T + H, 'fg-thin') +
+      tx(c2(x0 + W + 24), c2(y0 + (T + H) / 2 + 4), nf(o.total) + u, 'ft-dim');
+  else s += ln(x0 + W / 2, y0, x0 + W / 2, y0 + T, 'fg-dash') + tx(c2(x0 + W / 2 + 6), c2(y0 + T / 2 + 7), nf(o.t) + u, 'ft-dim');
+  return svg(320, c2(y0 + T + H + 30), s, 'Gevel: een rechthoek met een driehoek erop');
+}

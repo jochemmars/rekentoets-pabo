@@ -3,7 +3,7 @@ import { bar, line, pie } from './grafieken';
 import { nline } from './getallenlijn';
 import { hgrid, map } from './kaart';
 import { clock } from './klok';
-import { circ, cuboid, cyl, lshape, rect, tri } from './meetkunde';
+import { circ, cuboid, cyl, house, lshape, rect, tri } from './meetkunde';
 import { cup, person, thermo } from './meten';
 import { shapes, sticks } from './patronen';
 import { sheet, table } from './tabellen';
@@ -22,6 +22,7 @@ export const F = {
   circ,
   cuboid,
   cyl,
+  house,
   cup,
   thermo,
   sticks,
