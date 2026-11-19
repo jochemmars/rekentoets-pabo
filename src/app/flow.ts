@@ -7,6 +7,7 @@ import { seed } from './hulp';
 import { cleanHist, LS, saveHistory, saveSession } from './opslag';
 import { go, render } from './render';
 import { newUi, qElapsed, S } from './state';
+import { tel } from './teller';
 import { commit, startTick, stopTick } from './timer';
 
 const DEMO_IDS = ['AH01', 'AH02', 'AH03', 'AH04', 'AH05', 'BH01', 'BH02', 'BH06', 'BH11'];
@@ -126,6 +127,7 @@ export function finish(): void {
     return;
   }
   const sum = summarize(s);
+  tel(s.kind === 'test' ? 'proeftoets-klaar' : 'oefenen-klaar');
   const counts = s.kind === 'test' || sum.n >= 5;
   if (counts) {
     S.history = cleanHist(S.history.concat([historyEntry(s, sum)]), S.wiped);
@@ -155,6 +157,7 @@ export function finish(): void {
 
 export function startTest(mode: Modus): void {
   S.s = newTest(mode, seed());
+  tel(mode === 'full' ? 'proeftoets-start-full' : 'proeftoets-start-short');
   S.ui = null;
   S.notice = '';
   S.view = 'run';
@@ -166,6 +169,7 @@ export function startTest(mode: Modus): void {
 export function startPractice(sel: OefenSelectie): void {
   const s = newPractice(sel, seed());
   if (!nextQuestion(s)) return;
+  tel('oefenen-start');
   S.s = s;
   S.view = 'run';
   S.notice = '';

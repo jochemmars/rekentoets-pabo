@@ -7,6 +7,7 @@ import { luister } from './invoer';
 import { alsSessie, cleanHist, isDomein, LS } from './opslag';
 import { render, viewFromHash } from './render';
 import { S } from './state';
+import { startTeller } from './teller';
 
 function leesInstelling(): void {
   const p = LS.get('prac');
@@ -31,6 +32,7 @@ export function boot(): void {
   S.view = viewFromHash();
   luister();
   render();
+  startTeller();
   // testhaak voor de end-to-end-tests (alleen met ?e2e in de adresbalk)
   if (new URLSearchParams(location.search).has('e2e'))
     Object.defineProperty(window, '__rwt', { configurable: true, value: { S, TPL, make, Rng } });

@@ -34,7 +34,7 @@ Je hebt geen account nodig en er hoeft niets geïnstalleerd te worden. De app we
 
 ## Je voortgang
 
-Je resultaten worden alleen bewaard in je eigen browser, op je eigen apparaat. Niemand anders kan ze zien en er wordt niets naar een server gestuurd. Daardoor geldt wel:
+Je resultaten worden alleen bewaard in je eigen browser, op je eigen apparaat. Niemand anders kan ze zien en je antwoorden en resultaten worden nooit naar een server gestuurd. De app telt wel anoniem hoe vaak hij gebruikt wordt, met [GoatCounter](https://www.goatcounter.com): zonder cookies en zonder persoonsgegevens. Daardoor geldt wel:
 
 - Gebruik steeds hetzelfde apparaat en dezelfde browser.
 - In een privé- of incognitovenster wordt niets bewaard.
@@ -77,6 +77,17 @@ npm run build     # typecheck en productie-build in dist/
 ### Golden master
 
 `tests/golden/golden.json` bevat de uitvoer van alle opgavetypes op drie niveaus met vaste seeds, plus gesimuleerde proeftoetsen en oefenrondes. Het is gemaakt uit de oude versie van één bestand (`npm run golden:uit-oude-versie`). Verandert een opgave bewust, werk het bestand dan bij met `npm run golden:bijwerken` en controleer het verschil in de diff voordat je het commit.
+
+### Steunknop en bezoekersteller
+
+Beide staan uit tot je ze instelt, als repository-variabele onder **Settings → Secrets and variables → Actions → Variables**:
+
+| Variabele     | Voorbeeld                    | Wat het doet                                                                        |
+| ------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| `STEUN_URL`   | `https://ko-fi.com/jouwnaam` | toont een rustige steunkaart onder de uitslag en bij de uitleg (alleen https-links) |
+| `GOATCOUNTER` | `rekentoets-pabo`            | telt anoniem bezoeken en gebeurtenissen zoals 'proeftoets gestart' via GoatCounter  |
+
+Na het instellen: draai de workflow **Deploy** opnieuw (Actions → Deploy → Run workflow). Lokaal kan het ook met `VITE_STEUN_URL=... npm run dev`.
 
 ### Publiceren
 

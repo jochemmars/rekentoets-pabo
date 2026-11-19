@@ -6,6 +6,7 @@ import { cleanNum } from './hulp';
 import { saveSession } from './opslag';
 import { render, syncSubmit, viewFromHash } from './render';
 import { qElapsed, S } from './state';
+import { tel } from './teller';
 import { commit } from './timer';
 
 function heeftKlasse(t: EventTarget | null, k: string): t is Element {
@@ -37,6 +38,8 @@ function tipHide(): void {
 
 export function luister(): void {
   document.addEventListener('click', (ev) => {
+    // de doneerlink opent gewoon; we tellen alleen dat erop geklikt is
+    if (ev.target instanceof Element && ev.target.closest('a.steun')) tel('steun-klik');
     const el = ev.target instanceof Element ? ev.target.closest('[data-act]') : null;
     if (!el || ((el instanceof HTMLButtonElement || el instanceof HTMLInputElement) && el.disabled)) return;
     const fn = ACT[el.getAttribute('data-act') ?? ''];

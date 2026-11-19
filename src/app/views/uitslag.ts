@@ -6,6 +6,7 @@ import { dots, fmtDate, fmtDur, fmtSecs, pct, pill } from '../hulp';
 import { I } from '../iconen';
 import { S } from '../state';
 import { qBody } from './opgave';
+import { steunKaart } from './steun';
 import { viewStart } from './start';
 
 /** balkjes met 'a van b goed' per onderdeel of domein */
@@ -108,6 +109,7 @@ export function viewResult(): string {
       doms[0] +
       '">Oefen dit domein</button></div>';
   h += '</section>';
+  h += steunKaart();
   const wrong = R.items.filter((x) => !x.ok).length;
   let lastPart = '';
   h +=

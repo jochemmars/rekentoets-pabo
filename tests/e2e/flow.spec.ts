@@ -60,6 +60,8 @@ test.afterEach(({ page }) => {
 });
 
 test('startscherm en voorbeeldsom', async ({ page }) => {
+  // geen steunknop op het startscherm: alleen na een uitslag en bij de uitleg
+  await expect(page.locator('a.steun')).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Oefen de rekentoets voor de pabo');
   // alleen de hoofdmodus heeft een gevulde knop
   await expect(page.locator('.modes .btn.pri')).toHaveCount(1);
@@ -126,11 +128,17 @@ test('korte proeftoets van begin tot uitslag', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Je oefenscore' })).toBeVisible();
   await expect(page.locator('.score-n')).toContainText('/ 100');
   await expect(page.locator('details.rev')).toHaveCount(20);
+  // de vraag om steun staat onder de uitslag en opent in een nieuw tabblad
+  const steun = page.locator('a.steun');
+  await expect(steun).toHaveAttribute('href', 'https://example.org/steun');
+  await expect(steun).toHaveAttribute('target', '_blank');
+  await expect(steun).toHaveAttribute('rel', 'noopener');
 
   await page.locator('.tabs [data-v="voortgang"]').click();
   await expect(page.locator('.tbl.hist tbody tr')).toHaveCount(1);
   await page.locator('.tabs [data-v="uitleg"]').click();
   await expect(page.getByRole('heading', { name: 'Over de toets' })).toBeVisible();
+  await expect(page.locator('.steun-kaart')).toBeVisible();
 });
 
 test('stoppen tijdens een toets vraagt eerst om bevestiging', async ({ page }) => {

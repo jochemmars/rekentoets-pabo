@@ -23,7 +23,8 @@ export default defineConfig({
     { name: '1280-donker', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 }, colorScheme: 'dark' } },
   ],
   webServer: {
-    command: `npx vite build && npx vite preview --port ${poort} --strictPort`,
+    // met een voorbeeldlink, zodat de steunknop ook getest wordt; zonder teller
+    command: `VITE_STEUN_URL=https://example.org/steun npx vite build && npx vite preview --port ${poort} --strictPort`,
     url: `http://localhost:${poort}/rekentoets-pabo/`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

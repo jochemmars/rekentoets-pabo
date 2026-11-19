@@ -1,6 +1,8 @@
 /* Uitleg over de echte toets en over deze app, met alle soorten opgaven. */
 import { TPL } from '../../banken';
+import { GOATCOUNTER } from '../../config';
 import { DOM } from '../../engine';
+import { steunKaart } from './steun';
 
 export function viewInfo(): string {
   let h =
@@ -19,6 +21,9 @@ export function viewInfo(): string {
     '<li>De opbouw, de tijden en de verdeling over de domeinen volgen de echte toets.</li>' +
     '<li>De opgaven zijn zelfgemaakt bij de eindtermen uit de handreiking. Het zijn geen echte toetsopgaven: die geeft Cito niet vrij.</li>' +
     '<li>De oefenscore (0 tot 100) is een eigen maat van deze app. Je kunt er geen RWT-score uit afleiden.</li>' +
+    (GOATCOUNTER
+      ? '<li>De app telt anoniem hoe vaak hij gebruikt wordt, met GoatCounter: zonder cookies en zonder je antwoorden of resultaten. Die blijven alleen in je eigen browser.</li>'
+      : '') +
     '<li>In de echte toets tellen vijf proefopgaven niet mee. In deze app tellen alle opgaven mee.</li>' +
     '<li>Maak daarnaast de officiële oefentoets van Cito. De link staat op <a href="https://www.goedvoorbereidnaardepabo.nl/rekenen-wiskunde/" target="_blank" rel="noopener">goedvoorbereidnaardepabo.nl</a>.</li></ul></div></section>';
   h +=
@@ -50,5 +55,5 @@ export function viewInfo(): string {
         .join('') +
       '</ul></details>';
   });
-  return h + '</section>';
+  return h + '</section>' + steunKaart();
 }
