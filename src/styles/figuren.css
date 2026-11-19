@@ -1,0 +1,302 @@
+/* Figuren: SVG-klassen voor grafieken, meetkunde en tabellen */
+/* figuren */
+.fig {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  display: block;
+}
+.fig.fig-s {
+  max-width: 190px;
+}
+.fig.fig-m {
+  max-width: 280px;
+}
+.fig.fig-t {
+  max-width: 150px;
+}
+.figbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.figrow {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+.fig text {
+  font-family: var(--f-body);
+  fill: var(--ink-2);
+  font-size: 12px;
+}
+.fig .ft-title {
+  fill: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+}
+.fig .ft-ax {
+  font-size: 11.5px;
+  fill: var(--muted);
+}
+.fig .ft-tick,
+.fig .ft-cat {
+  font-size: 11.5px;
+}
+.fig .ft-dim {
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.fig .ft-big {
+  font-size: 20px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.fig .ft-clock {
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.fig .ft-q {
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--accent);
+}
+.fig .ft-mark {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--accent-ink);
+}
+.fig .ft-in {
+  fill: var(--on-series);
+  font-weight: 700;
+  font-size: 13px;
+}
+.fg-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.fg-grid2 {
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+.fg-base,
+.fg-axis {
+  stroke: var(--line-2);
+  stroke-width: 1.5;
+}
+.fg-bar {
+  fill: var(--s1);
+}
+.fg-ln {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.fg-ln1 {
+  stroke: var(--s1);
+}
+.fg-ln2 {
+  stroke: var(--s2);
+}
+.fg-dot {
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.fg-s1 {
+  fill: var(--s1);
+}
+.fg-s2 {
+  fill: var(--s2);
+}
+.fg-s3 {
+  fill: var(--s3);
+}
+.fg-s4 {
+  fill: var(--s4);
+}
+.fg-s5 {
+  fill: var(--s5);
+}
+.fg-b1 {
+  fill: var(--s1);
+  background: var(--s1);
+}
+.fg-b2 {
+  fill: var(--s2);
+  background: var(--s2);
+}
+.fg-b3 {
+  fill: var(--s3);
+  background: var(--s3);
+}
+.fg-b4 {
+  fill: var(--s4);
+  background: var(--s4);
+}
+.fg-b5 {
+  fill: var(--s5);
+  background: var(--s5);
+}
+.fg-slice {
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.fg-shape {
+  fill: var(--shape);
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.fg-shape-o {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.fg-thin {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+.fg-dash {
+  stroke: var(--ink-2);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 4;
+  fill: none;
+}
+.fg-arrow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fg-cell {
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.fg-cellbox {
+  fill: var(--surface);
+  stroke: var(--ink-2);
+  stroke-width: 1.2;
+}
+.fg-mark {
+  fill: var(--accent);
+}
+.fg-pin {
+  fill: var(--ink);
+}
+.fg-body {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.fg-tk1 {
+  stroke: var(--ink);
+  stroke-width: 1.6;
+}
+.fg-tk2 {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+}
+.fg-hand1 {
+  stroke: var(--ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.fg-hand2 {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.fg-water {
+  fill: var(--water);
+}
+.fg-merc {
+  fill: var(--bad);
+}
+.fg-match {
+  stroke: var(--s2);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.fg-sh {
+  stroke: var(--surface);
+  stroke-width: 1;
+}
+.fg-trunk {
+  fill: var(--line-2);
+}
+.fg-crown {
+  fill: var(--s3);
+}
+.lg {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.lg li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sw {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.pg-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.pg-goal {
+  stroke: var(--good);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+.pg-ln {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.pg-area {
+  fill: var(--accent);
+  opacity: 0.08;
+}
+.pg-dot {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.pg-dot.last {
+  fill: var(--ink);
+}
+.pg-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.pg-t {
+  font-family: var(--f-body);
+  font-size: 11.5px;
+  fill: var(--muted);
+}
+.pg-tg {
+  fill: var(--good);
+  font-weight: 600;
+}

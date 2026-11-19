@@ -1,0 +1,99 @@
+/* Kleuren (licht en donker), letter en maten */
+:root {
+  /* Rustig en licht: vlakke achtergrond, witte vlakken met 1px randen, één blauwe accentkleur.
+     Afstanden uit de reeks 4 · 8 · 12 · 16 · 24 · 32. Donker gebruikt dezelfde kleurfamilie. */
+  --paper: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --ink: #12161c;
+  --ink-2: #3d4653;
+  --muted: #5f6875;
+  --line: #e1e4e9;
+  --line-2: #c8cdd5;
+  --accent: #1d4ed8;
+  --accent-hover: #1a44bd;
+  --accent-ink: #ffffff;
+  --accent-soft: #eef3ff;
+  --good: #166534;
+  --good-bg: #edf7f0;
+  --warn: #8a4b00;
+  --warn-bg: #fdf3e1;
+  --bad: #b42318;
+  --bad-bg: #fdeeec;
+  --s1: #4a86e8;
+  --s2: #e8743b;
+  --s3: #2aa37a;
+  --s4: #e3a22b;
+  --s5: #d77aa3;
+  --shape: #eaf0f8;
+  --water: #c6dcf5;
+  --on-series: #0f1419;
+  --overlay: rgba(15, 20, 25, 0.45);
+  /* één letter: Inter, met tabelcijfers zodat getallen in rijen netjes onder elkaar staan.
+     Schaal: 13 · 15 · 17 · 20 · 24 · 30, en 48 voor de score. */
+  --f-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r: 6px;
+  --r-card: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #0f1217;
+    --surface: #171b22;
+    --surface-2: #1f242d;
+    --ink: #e8ebf0;
+    --ink-2: #c0c6d0;
+    --muted: #949cab;
+    --line: #2a303a;
+    --line-2: #3d4553;
+    --accent: #7aa2ff;
+    --accent-hover: #93b4ff;
+    --accent-ink: #0b1220;
+    --accent-soft: #1c2740;
+    --good: #6fcf97;
+    --good-bg: #15291f;
+    --warn: #f0b45a;
+    --warn-bg: #2e2416;
+    --bad: #ff8f85;
+    --bad-bg: #33191a;
+    --s1: #5a91ea;
+    --s2: #e07a45;
+    --s3: #2fa57d;
+    --s4: #d9a030;
+    --s5: #d27fa5;
+    --shape: #232a35;
+    --water: #24425f;
+    --on-series: #0f1419;
+    --overlay: rgba(0, 0, 0, 0.6);
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0f1217;
+  --surface: #171b22;
+  --surface-2: #1f242d;
+  --ink: #e8ebf0;
+  --ink-2: #c0c6d0;
+  --muted: #949cab;
+  --line: #2a303a;
+  --line-2: #3d4553;
+  --accent: #7aa2ff;
+  --accent-hover: #93b4ff;
+  --accent-ink: #0b1220;
+  --accent-soft: #1c2740;
+  --good: #6fcf97;
+  --good-bg: #15291f;
+  --warn: #f0b45a;
+  --warn-bg: #2e2416;
+  --bad: #ff8f85;
+  --bad-bg: #33191a;
+  --s1: #5a91ea;
+  --s2: #e07a45;
+  --s3: #2fa57d;
+  --s4: #d9a030;
+  --s5: #d27fa5;
+  --shape: #232a35;
+  --water: #24425f;
+  --on-series: #0f1419;
+  --overlay: rgba(0, 0, 0, 0.6);
+}

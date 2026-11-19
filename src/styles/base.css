@@ -1,0 +1,129 @@
+/* Basis: letters, opmaak van de pagina, hulpklassen */
+* {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 17px/1.55 var(--f-body);
+  font-variant-numeric: tabular-nums;
+  font-optical-sizing: auto;
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+h1 {
+  font-size: 30px;
+  letter-spacing: -0.022em;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+p {
+  margin: 0;
+}
+.wrap {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 24px 16px 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.wrap.run {
+  padding-bottom: 32px;
+}
+.wrap.calc-open {
+  padding-bottom: 416px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.row.between {
+  justify-content: space-between;
+}
+.tbl td.tl {
+  text-align: left;
+}
+.score-of {
+  font-size: 0.42em;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+/* twee maten bijtekst: .small (15) en .tiny (13); .hint en .eyebrow zijn dezelfde rustige 13 */
+.small {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.tiny,
+.hint,
+.eyebrow {
+  font-size: 13px;
+  color: var(--muted);
+}
+.eyebrow {
+  font-weight: 500;
+}
+.lead {
+  font-size: 17px;
+  color: var(--ink-2);
+  max-width: 34em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

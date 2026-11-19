@@ -128,14 +128,29 @@ export function bouwEngine(api: GoldenApi): Record<string, unknown> {
     },
     oefen: oefen.map((sel, i) => sessie(api, E.newPractice(sel, 900 + i), 25)),
     parseNum: ['12', '12,5', '1.250', ' 3 ', '-4', ',5', '5,', 'abc', '', '1,2,3', '−3'].map((x) => [x, E.parseNum(x)]),
-    schatting: [[], [{ level: 2, ok: true }], [{ level: 1, ok: false }, { level: 3, ok: true }], Array.from({ length: 20 }, (_, i) => ({ level: (i % 3) + 1, ok: i % 4 !== 0 }))].map((r) => {
+    schatting: [
+      [],
+      [{ level: 2, ok: true }],
+      [
+        { level: 1, ok: false },
+        { level: 3, ok: true },
+      ],
+      Array.from({ length: 20 }, (_, i) => ({ level: (i % 3) + 1, ok: i % 4 !== 0 })),
+    ].map((r) => {
       const th = E.estimate(r);
       return [th, E.scoreOf(th), E.levelFor(th), kopie(E.verdict(E.scoreOf(th)))];
     }),
     notatie: getallen.map((x) => [x, api.kit.nf(x), api.kit.nf(x, 2), api.kit.inp(x), api.kit.eur(x), api.kit.rnd(x, 2)]),
     klok: [0, 59, 60, 527, 1439, 1440, -30].map((m) => api.kit.klok(m)),
     woorden: [0, 1, 13, 21, 22, 33, 100, 101, 999, 1000, 2025, 1000000, 3456789].map((n) => api.kit.words(n)),
-    breuken: [[1, 2], [2, 4], [6, 4], [9, 3], [7, 12], [22, 7]].map(([n, d]) => api.kit.frs(n as number, d as number)),
+    breuken: [
+      [1, 2],
+      [2, 4],
+      [6, 4],
+      [9, 3],
+      [7, 12],
+      [22, 7],
+    ].map(([n, d]) => api.kit.frs(n, d)),
   };
 }
 

@@ -1,0 +1,586 @@
+/* Toets en oefenen: balk, opgave, invoer, terugkoppeling, rekenmachine en dialoog */
+/* opgave */
+.runbar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.runbar-in {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rb-l {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+.rb-l b {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rb-l span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.rb-r {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--r);
+  color: var(--ink-2);
+}
+.timer[hidden] {
+  display: none;
+}
+.timer svg {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+.timer.low {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.timer.low svg {
+  color: var(--warn);
+}
+.btn.icon {
+  min-width: 40px;
+  padding: 4px 8px;
+  color: var(--muted);
+}
+.btn.icon:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+.btn.sm svg {
+  width: 18px;
+  height: 18px;
+}
+.btn.quiet {
+  color: var(--ink-2);
+}
+.btn.quiet:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+@media (max-width: 420px) {
+  .runbar .btn.quiet .lbl {
+    display: none;
+  }
+}
+.rb-prog {
+  position: relative;
+  height: 3px;
+  background: var(--line);
+}
+.rb-prog i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.rb-split {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--surface);
+}
+.q {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.q-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.q-meta .pill {
+  font-size: 13px;
+  border-radius: var(--r);
+}
+.q-text {
+  font-size: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 36em;
+}
+.q-text .ask,
+.ask {
+  font-weight: 600;
+}
+.q-fig {
+  display: flex;
+  justify-content: center;
+}
+.sum {
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  padding: 4px 0;
+}
+.sum .wrd {
+  font-size: 20px;
+  font-weight: 600;
+}
+.gap {
+  display: inline-block;
+  min-width: 1.5em;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent);
+  line-height: 1;
+}
+.fr {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.82em;
+  line-height: 1.15;
+  margin: 0 0.18em;
+  font-variant-numeric: tabular-nums;
+}
+.fr > span:first-child {
+  border-bottom: max(1px, 0.05em) solid currentColor;
+  padding: 0 0.25em 1px;
+}
+.fr > span:last-child {
+  padding: 1px 0.25em 0;
+}
+.fr .gap {
+  border-bottom: 0;
+  min-width: 1em;
+}
+.ltr {
+  font-weight: 600;
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.f-in {
+  width: 8.5em;
+  max-width: 60vw;
+  min-height: 52px;
+  padding: 8px 12px;
+  font-size: 20px;
+  font-weight: 600;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.f-in:hover {
+  border-color: var(--muted);
+}
+.f-in:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.f-in:disabled {
+  background: var(--surface-2);
+  opacity: 1;
+}
+.f-sign {
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--r);
+  border: 1px solid var(--line-2);
+  background: var(--surface-2);
+  font-size: 20px;
+  font-weight: 600;
+}
+.f-pre,
+.f-unit {
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  min-height: 52px;
+  padding: 8px 16px 8px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 17px;
+}
+.opt:hover:not(:disabled) {
+  border-color: var(--muted);
+}
+.opt-k {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.opt.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.opt.on .opt-k {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.opt.ok {
+  border-color: var(--good);
+  background: var(--good-bg);
+  box-shadow: inset 0 0 0 1px var(--good);
+}
+.opt.no {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  box-shadow: inset 0 0 0 1px var(--bad);
+}
+.opt:disabled {
+  cursor: default;
+  opacity: 1;
+  color: var(--ink);
+}
+.ord {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ord-seq,
+.ord-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 48px;
+}
+.ord-seq {
+  padding: 8px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r);
+}
+.chip {
+  min-height: 44px;
+  padding: 4px 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  font-size: 17px;
+  font-weight: 600;
+}
+.chip.sel {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.lt {
+  color: var(--muted);
+}
+.actbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 12;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  margin: 0 -16px;
+  padding: 12px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.actbar .btn {
+  flex: 1;
+}
+.actbar .kbd {
+  display: none;
+  order: 2;
+  flex-basis: 100%;
+  text-align: center;
+}
+/* alleen bij toetsenbordfocus: bij een muisklik zou de balk groeien en de knop onder de muis wegschuiven */
+.actbar:has(#submit:focus-visible) .kbd {
+  display: block;
+}
+
+/* terugkoppeling en uitwerking */
+.fb {
+  border-radius: var(--r-card);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  scroll-margin: 80px 0 96px;
+}
+.fb.ok {
+  border-color: color-mix(in srgb, var(--good) 35%, var(--line));
+}
+.fb.no {
+  border-color: color-mix(in srgb, var(--bad) 35%, var(--line));
+}
+.uitw > summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 0;
+}
+.uitw > summary::-webkit-details-marker {
+  display: none;
+}
+.uitw[open] .chev {
+  transform: rotate(90deg);
+}
+.uitw-b {
+  padding-top: 8px;
+}
+details.more > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--accent);
+}
+details.more > summary::-webkit-details-marker {
+  display: none;
+}
+details.more > summary svg {
+  width: 18px;
+  height: 18px;
+}
+details.more > p {
+  padding-top: 8px;
+}
+.fb-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px;
+}
+.fb.ok .fb-h {
+  color: var(--good);
+}
+.fb.no .fb-h {
+  color: var(--bad);
+}
+.fb-h svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.kv {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  font-size: 15px;
+}
+.kv dt {
+  color: var(--muted);
+}
+.kv dd {
+  margin: 0;
+  font-weight: 600;
+}
+.st {
+  margin: 0;
+  padding-left: 1.3em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+}
+.st li::marker {
+  color: var(--muted);
+  font-weight: 600;
+}
+.tip {
+  font-size: 15px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 8px 12px;
+  color: var(--ink-2);
+}
+.uitw > summary,
+details.rev > summary {
+  cursor: pointer;
+}
+.chev {
+  transition: transform 0.15s;
+}
+.dots {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+.dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--muted);
+}
+.dots i.on {
+  background: var(--muted);
+}
+
+/* rekenmachine en dialoog */
+.sheet-ov {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+}
+.calc {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-bottom: 0;
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  padding: 12px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 -4px 16px rgba(15, 20, 25, 0.08);
+}
+.calc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 15px;
+}
+.calc-d {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 4px 12px;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+.calc-e {
+  font-size: 15px;
+  color: var(--muted);
+  min-height: 1.3em;
+  word-break: break-all;
+  text-align: right;
+}
+.calc-r {
+  font-size: 24px;
+  font-weight: 600;
+}
+.calc-k {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+.calc-k button[data-k='P'] {
+  font-size: 13px;
+}
+.calc-k button {
+  min-height: 44px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 20px;
+  font-weight: 500;
+}
+.calc-k button:hover {
+  background: var(--surface-2);
+}
+.calc-k button.op {
+  background: var(--surface-2);
+}
+.calc-k button.eq {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  grid-column: span 2;
+}
+.dlg-ov {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.dlg {
+  background: var(--surface);
+  border-radius: var(--r-card);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--line-2);
+}

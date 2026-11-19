@@ -1,0 +1,7 @@
+/* Volgorde is de cascade: niet omwisselen. */
+@import './tokens.css';
+@import './base.css';
+@import './components.css';
+@import './toets.css';
+@import './uitslag.css';
+@import './figuren.css';

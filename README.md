@@ -8,12 +8,12 @@ Je hebt geen account nodig en er hoeft niets geïnstalleerd te worden. De app we
 
 ## Wat kun je ermee?
 
-| Oefenvorm | Wat het is |
-|---|---|
+| Oefenvorm                | Wat het is                                                                                                                                                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Volledige proeftoets** | 55 opgaven: 17 hoofdrekenen in 17 minuten en 38 andere opgaven in 103 minuten. Je kunt niet terugbladeren en niets overslaan. De uitslag krijg je aan het eind. |
-| **Korte proeftoets** | 20 opgaven in dezelfde verhouding, in 6 + 38 minuten. Handig om snel te zien waar je staat. |
-| **Oefenen per domein** | Zonder tijdsdruk. Na elke opgave zie je meteen of het goed is, met de uitwerking erbij. Je kiest het domein, het onderdeel en het niveau. |
-| **Voortgang** | Je oefenscore per sessie, je resultaten per domein en de onderwerpen waar je de meeste fouten maakt. Met één tik oefen je precies die onderwerpen. |
+| **Korte proeftoets**     | 20 opgaven in dezelfde verhouding, in 6 + 38 minuten. Handig om snel te zien waar je staat.                                                                     |
+| **Oefenen per domein**   | Zonder tijdsdruk. Na elke opgave zie je meteen of het goed is, met de uitwerking erbij. Je kiest het domein, het onderdeel en het niveau.                       |
+| **Voortgang**            | Je oefenscore per sessie, je resultaten per domein en de onderwerpen waar je de meeste fouten maakt. Met één tik oefen je precies die onderwerpen.              |
 
 ## Zo werken de opgaven
 
@@ -46,4 +46,3 @@ Stop je halverwege een toets, dan kun je later verder waar je was. De klok staat
 
 - **iPhone:** open de link in Safari, tik op de deelknop en kies **Zet op beginscherm**.
 - **Android:** open de link in Chrome, tik op het menu (drie puntjes) en kies **Toevoegen aan startscherm**.
-

@@ -1,0 +1,7 @@
+dist
+node_modules
+src/legacy
+tests/golden/golden.json
+package-lock.json
+playwright-report
+test-results
