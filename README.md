@@ -47,12 +47,3 @@ Stop je halverwege een toets, dan kun je later verder waar je was. De klok staat
 - **iPhone:** open de link in Safari, tik op de deelknop en kies **Zet op beginscherm**.
 - **Android:** open de link in Chrome, tik op het menu (drie puntjes) en kies **Toevoegen aan startscherm**.
 
-## Techniek
-
-De hele app staat in één bestand: `index.html`. Daarin zitten de opgavengenerator, de toetslogica en de vormgeving. Alleen de lettertypen worden van Google Fonts geladen. Er is geen server, database of buildstap nodig, dus GitHub Pages kan het bestand direct tonen.
-
-Zelf online zetten: zet `index.html` in een openbare repository en zet onder **Settings → Pages** de optie *Deploy from a branch* aan (branch `main`, map `/ (root)`).
-
-## Fout gevonden?
-
-Klopt er een opgave niet, of mis je een soort opgave uit de echte toets? Maak dan een [issue](https://github.com/jochemmars/rekentoets-pabo/issues) aan. Zet erbij welke opgave het was (de code staat in de uitslag, bijvoorbeeld `B.7`) en wat er niet klopt.
