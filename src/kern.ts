@@ -1,6 +1,6 @@
 // Alles behalve de schermen: kern, figuren, opgavebanken en engine.
 // Tijdens de omzetting naar TypeScript wijst dit stap voor stap naar de nieuwe modules.
-import './legacy/core.js';
+import './legacy/brug';
 import './legacy/bankA.js';
 import './legacy/bankB.js';
 import './legacy/bankC.js';
