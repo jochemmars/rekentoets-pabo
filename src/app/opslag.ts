@@ -116,7 +116,7 @@ export function cleanHist(list: unknown, wiped: number): HistorieRegel[] {
     if (isObject(sel) && typeof sel.d === 'string' && /^[A-D]{1,4}$/.test(sel.d))
       e.sel = {
         d: sel.d,
-        p: sel.p === 'H' || sel.p === 'N' ? (sel.p) : 'HN',
+        p: sel.p === 'H' || sel.p === 'N' ? sel.p : 'HN',
         l: Number(sel.l) >= 1 && Number(sel.l) <= 3 ? (Math.round(Number(sel.l)) as Niveau) : 0,
       };
     out.push(e);
