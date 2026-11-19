@@ -1,3 +1,3 @@
 import './styles/index.css';
-import './kern';
+import './legacy/brug';
 import './legacy/app.js';
