@@ -87,17 +87,28 @@ p { margin: 0; }
 .pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 13px; font-weight: 600; background: var(--surface-2); color: var(--ink-2); }
 .pill.good { background: var(--good-bg); color: var(--good); } .pill.warn { background: var(--warn-bg); color: var(--warn); } .pill.bad { background: var(--bad-bg); color: var(--bad); }
 .pill svg { width: 14px; height: 14px; }
-.facts { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 15px; color: var(--ink-2); list-style: none; margin: 0; padding: 0; }
-.facts li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 1px; background: var(--accent); margin-right: 8px; vertical-align: middle; transform: rotate(45deg); }
+/* elk feit begint met een scheidingspunt; het punt aan het begin van een regel valt buiten de clip-path */
+.facts { display: flex; flex-wrap: wrap; font-size: 15px; color: var(--muted); list-style: none; margin: 0 0 0 -16px; padding: 0; clip-path: inset(0 0 0 16px); }
+.facts li::before { content: '·'; display: inline-block; width: 16px; text-align: center; color: var(--line-2); font-weight: 700; }
 
 /* start */
-.hero { display: flex; flex-direction: column; gap: 12px; padding-top: 8px; }
-.demo { border: 1px solid var(--line); border-radius: var(--r-card); background: var(--surface); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.hero { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
+.hero .lead { margin-top: 4px; }
 .modes { display: grid; gap: 12px; }
 .mode { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; }
 .mode h3 { grid-column: 1; }
 .mode .facts { grid-column: 1; }
 .mode .btn { grid-column: 2; grid-row: 1 / span 2; }
+.mode.main { border-color: var(--line-2); }
+.demo-d { padding: 0; gap: 0; }
+.demo-d > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; }
+.demo-d > summary::-webkit-details-marker { display: none; }
+.demo-d > summary > span { display: flex; flex-direction: column; }
+.demo-d > summary b { font-weight: 600; }
+.demo-d > summary .chev { width: 20px; height: 20px; transition: transform 0.15s; }
+.demo-d[open] > summary .chev { transform: rotate(180deg); }
+.demo-d[open] > summary { border-bottom: 1px solid var(--line); }
+.demo-b { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 @media (max-width: 420px) { .mode { grid-template-columns: 1fr; } .mode .btn { grid-column: 1; grid-row: auto; } h1 { font-size: 24px; } }
 
 /* navigatie */
@@ -2910,7 +2921,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
 
   /* ---------- toestand en opslag ---------- */
   var S = { view: 'start', s: null, ui: null, runAt: 0, result: null, history: [], demo: null, dialog: null, calc: { open: false, expr: '', res: '' },
-    prac: { doms: ['A', 'B', 'C', 'D'], part: 'HN', level: 0, count: 10 }, onlyWrong: false, filter: 'toets', notice: '', wiped: 0 };
+    prac: { doms: ['A', 'B', 'C', 'D'], part: 'HN', level: 0, count: 10 }, demoOpen: false, onlyWrong: false, filter: 'toets', notice: '', wiped: 0 };
   var mem = {};
   var LS = {
     get: function (k) { try { var v = window.localStorage.getItem('rwt.' + k); return v ? JSON.parse(v) : (mem[k] === undefined ? null : mem[k]); } catch (e) { return mem[k] === undefined ? null : mem[k]; } },
@@ -2995,22 +3006,23 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
   }
   function demoHtml() {
     var u = S.demo, q = u.q;
-    return '<section class="demo" aria-label="Voorbeeldopgave"><p class="eyebrow">Probeer er één · hoofdrekenen</p>' + qBody(q) + answerUi(q, u, 'demo') +
-      (u.checked ? feedback(q, u.given, u.ok) + '<div class="row"><button class="btn" data-act="demonew">Nog een som</button></div>' : '<div class="row"><button class="btn pri" data-act="democheck">Controleer</button></div>') + '</section>';
+    return '<details class="card demo demo-d"' + (S.demoOpen ? ' open' : '') + '><summary><span><b>Probeer een voorbeeldsom</b><span class="tiny">Eén opgave hoofdrekenen, zonder klok</span></span>' + I.down + '</summary><div class="demo-b">' + qBody(q) + answerUi(q, u, 'demo') +
+      (u.checked ? feedback(q, u.given, u.ok) + '<div class="row"><button class="btn" data-act="demonew">Nog een som</button></div>' : '<div class="row"><button class="btn" data-act="democheck">Controleer</button></div>') + '</div></details>';
   }
   function viewStart() {
     var saved = S.s, last = S.history.length ? S.history[S.history.length - 1] : null, h = '';
-    h += '<header class="hero"><p class="eyebrow">Landelijke reken- en wiskundetoets (RWT)</p><h1>Oefen de <span>rekentoets</span> voor de pabo</h1><p class="lead">Proeftoetsen in de opbouw van de echte toets. Elke keer met nieuwe getallen en nieuwe verhalen, en na afloop de uitwerking van elke opgave.</p></header>';
+    h += '<header class="hero"><p class="eyebrow">Landelijke reken- en wiskundetoets (RWT)</p><h1>Oefen de rekentoets voor de pabo</h1><p class="lead">Proeftoetsen in de opbouw van de echte toets. Elke keer met nieuwe getallen en nieuwe verhalen, en na afloop de uitwerking van elke opgave.</p></header>';
     if (saved) {
       var pos = saved.kind === 'test' ? 'opgave ' + Math.min(saved.idx + 1, saved.plan.length) + ' van ' + saved.plan.length : saved.items.length + ' opgaven gemaakt';
       h += '<section class="card"><h3>Je was nog bezig</h3><p>' + MODE_NAME[saved.mode] + ', ' + pos + '. De tijd heeft stilgestaan.</p><div class="row"><button class="btn pri" data-act="resume">Verder gaan</button><button class="btn" data-act="discard">Stoppen</button></div></section>';
     }
-    h += demoHtml();
+    // alleen de hoofdmodus krijgt een gevulde knop; de andere twee zijn rustige secundaire knoppen
     h += '<section class="stack"><h2>Kies een oefenvorm</h2><div class="modes">' +
-      '<article class="card mode"><h3>Volledige proeftoets</h3><ul class="facts"><li>55 opgaven</li><li>17 + 103 minuten</li><li>niet terugbladeren</li></ul><button class="btn pri" data-act="start" data-mode="full">Start</button></article>' +
-      '<article class="card mode"><h3>Korte proeftoets</h3><ul class="facts"><li>20 opgaven</li><li>6 + 38 minuten</li><li>zelfde opbouw</li></ul><button class="btn pri" data-act="start" data-mode="short">Start</button></article>' +
-      '<article class="card mode"><h3>Oefenen per domein</h3><ul class="facts"><li>zonder tijdsdruk</li><li>meteen de uitwerking</li></ul><a class="btn" href="#oefenen" data-act="nav" data-v="oefenen">Kies</a></article></div></section>';
-    if (last) h += '<section class="card"><h3>Laatste resultaat</h3><div class="row">' + pill(E.verdict(last.score)) + '<span>oefenscore <b>' + last.score + '</b></span><span class="small">' + MODE_NAME[last.mode] + ', ' + fmtDate(last.t) + '</span></div><div class="row"><a class="btn sm" href="#voortgang" data-act="nav" data-v="voortgang">Bekijk je voortgang</a></div></section>';
+      '<article class="card mode main"><h3>Volledige proeftoets</h3><ul class="facts"><li>55 opgaven</li><li>17 + 103 minuten</li><li>niet terugbladeren</li></ul><button class="btn pri" data-act="start" data-mode="full">Start de proeftoets</button></article>' +
+      '<article class="card mode"><h3>Korte proeftoets</h3><ul class="facts"><li>20 opgaven</li><li>6 + 38 minuten</li><li>zelfde opbouw</li></ul><button class="btn" data-act="start" data-mode="short">Start' + I.arrow + '</button></article>' +
+      '<article class="card mode"><h3>Oefenen per domein</h3><ul class="facts"><li>zonder tijdsdruk</li><li>meteen de uitwerking</li></ul><a class="btn" href="#oefenen" data-act="nav" data-v="oefenen">Kies onderwerpen' + I.arrow + '</a></article></div></section>';
+    if (last) h += '<section class="card"><h3>Laatste resultaat</h3><div class="row">' + pill(E.verdict(last.score)) + '<span>Oefenscore <b>' + last.score + '</b></span><span class="tiny">' + MODE_NAME[last.mode] + ', ' + fmtDate(last.t) + '</span></div><div class="row"><a class="btn sm ghost" href="#voortgang" data-act="nav" data-v="voortgang">Bekijk je voortgang' + I.arrow + '</a></div></section>';
+    h += demoHtml();
     h += '<p class="tiny">Deze oefenapp is niet van Cito. De opgaven zijn zelfgemaakte variaties op de eindtermen van de RWT, geen echte toetsopgaven.</p>';
     return h;
   }
@@ -3397,6 +3409,8 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     var u = S.ui; if (!u || !E.isComplete(u.q, u.given)) return;
     if (S.s.kind === 'test') submitTest(); else if (!u.checked) checkPractice();
   });
+  // onthoud of de voorbeeldsom open staat, zodat hij na opnieuw tekenen open blijft ('toggle' bubbelt niet: daarom capture)
+  document.addEventListener('toggle', function (ev) { var d = ev.target; if (d.classList && d.classList.contains('demo-d')) S.demoOpen = d.open; }, true);
   // uitleg bij een punt in de voortgangsgrafiek
   function tipShow(el) {
     var box = el.closest('.chart'), svg = box.querySelector('svg'), r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal, tip = box.querySelector('.tipbox');
