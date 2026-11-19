@@ -34,7 +34,7 @@ Je hebt geen account nodig en er hoeft niets geïnstalleerd te worden. De app we
 
 ## Je voortgang
 
-Je resultaten worden alleen bewaard in je eigen browser, op je eigen apparaat. Niemand anders kan ze zien en je antwoorden en resultaten worden nooit naar een server gestuurd. De app telt wel anoniem hoe vaak hij gebruikt wordt, met [GoatCounter](https://www.goatcounter.com): zonder cookies en zonder persoonsgegevens. Daardoor geldt wel:
+Je resultaten worden alleen bewaard in je eigen browser, op je eigen apparaat. Niemand anders kan ze zien en er wordt niets naar een server gestuurd. Daardoor geldt wel:
 
 - Gebruik steeds hetzelfde apparaat en dezelfde browser.
 - In een privé- of incognitovenster wordt niets bewaard.
