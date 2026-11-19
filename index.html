@@ -123,10 +123,18 @@ p { margin: 0; }
 .runbar-in { max-width: 660px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .rb-l { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
 .rb-l b { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .rb-l span { font-size: 13px; color: var(--muted); }
-.rb-r { display: flex; align-items: center; gap: 8px; }
-.timer { font-size: 15px; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--surface-2); min-width: 4.6em; text-align: center; }
-.timer.low { background: var(--warn-bg); color: var(--warn); }
-.rb-prog { height: 4px; background: var(--surface-2); } .rb-prog i { display: block; height: 100%; background: var(--accent); }
+.rb-r { display: flex; align-items: center; gap: 4px; }
+.timer { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; padding: 4px 8px; border-radius: var(--r); color: var(--ink-2); }
+.timer[hidden] { display: none; }
+.timer svg { width: 16px; height: 16px; color: var(--muted); }
+.timer.low { background: var(--warn-bg); color: var(--warn); } .timer.low svg { color: var(--warn); }
+.btn.icon { min-width: 40px; padding: 4px 8px; color: var(--muted); }
+.btn.icon:hover { color: var(--ink); background: var(--surface-2); }
+.btn.sm svg { width: 18px; height: 18px; }
+.btn.quiet { color: var(--ink-2); } .btn.quiet:hover { color: var(--ink); background: var(--surface-2); }
+@media (max-width: 420px) { .runbar .btn.quiet .lbl { display: none; } }
+.rb-prog { position: relative; height: 3px; background: var(--line); } .rb-prog i { display: block; height: 100%; background: var(--accent); }
+.rb-split { position: absolute; top: -2px; bottom: -2px; width: 2px; margin-left: -1px; background: var(--surface); }
 .q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 .q-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); font-weight: 500; }
 .q-meta .pill { font-size: 13px; }
@@ -163,8 +171,10 @@ p { margin: 0; }
 .chip { min-height: 44px; padding: 4px 16px; border-radius: var(--r); border: 1px solid var(--line-2); background: var(--surface); font-size: 17px; font-weight: 600; }
 .chip.sel { border-color: var(--accent); background: var(--accent-soft); }
 .lt { color: var(--muted); }
-.actbar { position: sticky; bottom: 0; z-index: 12; background: linear-gradient(transparent, var(--paper) 30%); padding: 16px 0; display: flex; gap: 8px; }
+.actbar { position: sticky; bottom: 0; z-index: 12; background: var(--paper); border-top: 1px solid var(--line); margin: 0 -16px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px; }
 .actbar .btn { flex: 1; }
+.actbar .kbd { display: none; order: 2; flex-basis: 100%; text-align: center; }
+.actbar:focus-within .kbd { display: block; }
 
 /* terugkoppeling en uitwerking */
 .fb { border-radius: var(--r-card); padding: 16px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--line); border-left-width: 6px; background: var(--surface); }
@@ -2921,7 +2931,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
 
   /* ---------- toestand en opslag ---------- */
   var S = { view: 'start', s: null, ui: null, runAt: 0, result: null, history: [], demo: null, dialog: null, calc: { open: false, expr: '', res: '' },
-    prac: { doms: ['A', 'B', 'C', 'D'], part: 'HN', level: 0, count: 10 }, demoOpen: false, onlyWrong: false, filter: 'toets', notice: '', wiped: 0 };
+    prac: { doms: ['A', 'B', 'C', 'D'], part: 'HN', level: 0, count: 10 }, demoOpen: false, timerHidden: false, onlyWrong: false, filter: 'toets', notice: '', wiped: 0 };
   var mem = {};
   var LS = {
     get: function (k) { try { var v = window.localStorage.getItem('rwt.' + k); return v ? JSON.parse(v) : (mem[k] === undefined ? null : mem[k]); } catch (e) { return mem[k] === undefined ? null : mem[k]; } },
@@ -2975,7 +2985,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
 
   /* ---------- opgave tekenen ---------- */
   function qBody(q) { return '<div class="q-text">' + q.q + '</div>' + (q.fig ? '<div class="q-fig">' + q.fig + '</div>' : ''); }
-  function answerUi(q, ui, pfx) {
+  function answerUi(q, ui, pfx, noHint) {
     var lock = ui.checked ? ' disabled' : '';
     if (q.type === 'mc') return '<div class="opts" role="radiogroup" aria-label="Antwoorden">' + q.opts.map(function (o, i) {
       var cls = 'opt' + (ui.given === i ? ' on' : '') + (ui.checked && i === q.ans ? ' ok' : '') + (ui.checked && ui.given === i && i !== q.ans ? ' no' : '');
@@ -2989,7 +2999,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     return '<div class="fields">' + q.fields.map(function (f, i) {
       return '<div class="field">' + (f.pre ? '<span class="f-pre">' + f.pre + '</span>' : '') + '<input id="' + pfx + i + '" class="f-in" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-label="Antwoord' + (q.fields.length > 1 ? ' ' + (i + 1) : '') + '" data-i="' + i + '" value="' + esc(ui.given[i] || '') + '"' + lock + '>' +
         (E.NEG[q.id] ? '<button type="button" class="f-sign" data-act="sign" data-i="' + i + '" aria-label="Maak het getal negatief of positief"' + lock + '>±</button>' : '') + (f.unit ? '<span class="f-unit">' + f.unit + '</span>' : '') + '</div>';
-    }).join('') + '</div><p class="hint">Alleen cijfers en een komma. Geen punt in grote getallen.' + (E.NEG[q.id] ? ' Met ± maak je het getal negatief.' : '') + '</p>';
+    }).join('') + '</div>' + (noHint ? '' : '<p class="hint">Alleen cijfers en een komma. Geen punt in grote getallen.' + (E.NEG[q.id] ? ' Met ± maak je het getal negatief.' : '') + '</p>');
   }
   function feedback(q, given, ok) {
     return '<section class="fb ' + (ok ? 'ok' : 'no') + '" aria-live="polite"><div class="fb-h">' + (ok ? I.ok + 'Goed' : I.no + 'Niet goed') + '</div>' +
@@ -3054,8 +3064,9 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     var h = '<main class="wrap run"><section class="card"><p class="eyebrow">' + M.name + ' · deel ' + (isH ? 1 : 2) + ' van 2</p><h2>' + (isH ? 'Hoofdrekenen' : 'Niet-hoofdrekenen') + '</h2>';
     if (!isH && missed) h += '<p class="tip"><b>De tijd voor hoofdrekenen was om.</b> ' + missed + (missed === 1 ? ' opgave heb' : ' opgaven heb') + ' je niet gemaakt. Die ' + (missed === 1 ? 'telt' : 'tellen') + ' als fout.</p>';
     h += '<ul class="facts"><li>' + (isH ? c.H : c.N) + ' opgaven</li><li>' + Math.round((isH ? M.tH : M.tN) / 60) + ' minuten</li><li>' + (isH ? 'geen rekenmachine' : 'soms een rekenmachine') + '</li></ul><div class="prose">';
-    if (isH) h += '<p>Je hebt ongeveer één minuut per opgave. De klok loopt door tot het deel af is.</p><p>Je kunt niet terug naar een vorige opgave en je kunt geen opgave overslaan. Weet je het niet? Vul dan je beste gok in.</p><p>Kladpapier mag je gebruiken. De toets past zich aan: na een goed antwoord wordt de volgende opgave vaak moeilijker.</p>';
+    if (isH) h += '<p>Je hebt ongeveer één minuut per opgave. De klok loopt door tot het deel af is. Wil je hem niet zien? Verberg hem met het oog naast de tijd. In de laatste minuut komt hij vanzelf terug.</p><p>Je kunt niet terug naar een vorige opgave en je kunt geen opgave overslaan. Weet je het niet? Vul dan je beste gok in.</p><p>Kladpapier mag je gebruiken. De toets past zich aan: na een goed antwoord wordt de volgende opgave vaak moeilijker.</p>';
     else h += '<p>Lees elke opgave goed en let op wat er precies gevraagd wordt. In sommige opgaven staan gegevens die je niet nodig hebt.</p><p>Bij een deel van de opgaven mag je de rekenmachine gebruiken. Dat zie je aan de knop Rekenmachine onder de opgave.</p><p>Ook hier kun je niet terug en niets overslaan.</p>';
+    h += '<p class="tip"><b>Antwoorden invullen.</b> Typ alleen cijfers en zo nodig een komma, zonder punt in grote getallen: 1250 en 12,5. Voor een negatief getal tik je op ±. Met Enter kom je op de knop; nog een keer Enter gaat naar de volgende opgave.</p>';
     return h + '</div><button class="btn pri wide" data-act="begin">Start deel ' + (isH ? 1 : 2) + '</button><button class="btn ghost" data-act="stop">Toets stoppen</button></section></main>';
   }
   function viewRun() {
@@ -3065,23 +3076,25 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     if (test) {
       var c = partCounts(s); total = c[q.part]; num = q.part === 'H' ? s.idx + 1 : s.idx - c.H + 1;
       left = '<b>' + E.PART[q.part] + '</b><span>Opgave ' + num + ' van ' + total + '</span>';
-      right = '<span id="timer" class="timer" role="timer" aria-label="Resterende tijd">' + fmtTime(remaining()) + '</span>';
-      bar = (num - 1) / total;
+      right = timerHtml(remaining(), 'Resterende tijd', !timerShown(remaining()));
+      bar = s.idx / s.plan.length;
     } else {
       total = s.sel.count; num = s.items.length + (u.checked ? 0 : 1); var good = s.items.filter(function (x) { return x.ok; }).length;
       left = '<b>Oefenen</b><span>Opgave ' + num + (total ? ' van ' + total : '') + ' · ' + good + ' goed</span>';
-      right = '<span id="timer" class="timer" role="timer" aria-label="Tijd voor deze opgave">' + fmtTime(qElapsed()) + '</span>';
+      right = timerHtml(qElapsed(), 'Tijd voor deze opgave', S.timerHidden);
       bar = total ? s.items.length / total : 0;
     }
-    var h = '<header class="runbar"><div class="runbar-in"><div class="rb-l">' + left + '</div><div class="rb-r">' + right + '<button class="btn ghost sm" data-act="stop">Stoppen</button></div></div><div class="rb-prog"><i data-w="' + Math.round(bar * 100) + '"></i></div></header>';
+    // één voortgangsbalk voor de hele toets, met een streepje waar deel 2 begint
+    var split = test ? '<b class="rb-split" data-l="' + (partCounts(s).H / s.plan.length * 100).toFixed(2) + '"></b>' : '';
+    var h = '<header class="runbar"><div class="runbar-in"><div class="rb-l">' + left + '</div><div class="rb-r">' + right + '<button class="btn ghost sm quiet" data-act="stop" aria-label="' + (test ? 'Toets stoppen' : 'Stoppen met oefenen') + '">' + I.x + '<span class="lbl">Stoppen</span></button></div></div><div class="rb-prog" role="progressbar" aria-label="Voortgang" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(bar * 100) + '"><i data-w="' + Math.round(bar * 100) + '"></i>' + split + '</div></header>';
     h += '<main class="wrap run' + (S.calc.open ? ' calc-open' : '') + '"><article class="q">';
     if (!test) h += '<div class="q-meta"><span class="pill">' + q.et + ' · ' + (ET[q.et] || q.name) + '</span><span>' + E.PART[q.part] + '</span>' + dots(q.level) + '</div>';
-    h += qBody(q) + answerUi(q, u, 'ans');
+    h += qBody(q) + answerUi(q, u, 'ans', test);
     if (q.calc && !u.checked) h += '<div class="row"><button class="btn sm" data-act="calc" aria-expanded="' + S.calc.open + '">' + I.calc + 'Rekenmachine</button></div>';
     h += '</article>';
     if (!test && u.checked) h += feedback(q, u.given, u.ok);
     var lastQ = test ? s.idx + 1 >= s.plan.length : (total && s.items.length >= total), nextPart = test && s.plan[s.idx + 1] && s.plan[s.idx + 1].part !== q.part;
-    h += '<div class="actbar">';
+    h += '<div class="actbar">' + (test ? '<p class="kbd tiny" aria-hidden="true">Druk op Enter om verder te gaan</p>' : '');
     if (test) h += '<button class="btn pri" id="submit" data-act="next"' + (E.isComplete(q, u.given) ? '' : ' disabled') + '>' + (lastQ ? 'Toets afronden' : nextPart ? 'Naar deel 2' : 'Volgende opgave') + '</button>';
     else if (!u.checked) h += '<button class="btn pri" id="submit" data-act="check"' + (E.isComplete(q, u.given) ? '' : ' disabled') + '>Controleer</button>';
     else h += '<button class="btn pri" id="submit" data-act="pnext">' + (lastQ ? 'Bekijk het resultaat' : 'Volgende opgave') + '</button>';
@@ -3089,6 +3102,12 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     if (S.calc.open) h += calcHtml();
     return h;
   }
+  function timerHtml(sec, label, hide) {
+    return '<span id="timer" class="timer" role="timer" aria-label="' + label + '"' + (hide ? ' hidden' : '') + '>' + I.clock + '<span id="timer-t">' + fmtTime(sec) + '</span></span>' +
+      '<button type="button" class="btn ghost sm icon" data-act="timerhide" aria-pressed="' + !!S.timerHidden + '" aria-label="' + (S.timerHidden ? 'Toon de tijd' : 'Verberg de tijd') + '" title="' + (S.timerHidden ? 'Toon de tijd' : 'Verberg de tijd') + '">' + (S.timerHidden ? I.eye : I.eyeOff) + '</button>';
+  }
+  // verborgen tijd komt in de laatste minuut van een toetsdeel vanzelf terug
+  function timerShown(rem) { return !S.timerHidden || rem <= 60; }
   function remaining() { var s = S.s; return s.left[s.phase] - (S.runAt ? (Date.now() - S.runAt) / 1000 : 0); }
   function commit() {
     var s = S.s; if (!s) return;
@@ -3104,8 +3123,8 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     if (s.kind === 'test') {
       if (s.phase !== 'H' && s.phase !== 'N') return;
       var rem = remaining(); if (rem <= 0) return timeUp();
-      if (el) { el.textContent = fmtTime(rem); el.classList.toggle('low', rem <= (s.phase === 'H' ? 60 : 300)); }
-    } else if (el && S.ui && !S.ui.checked) el.textContent = fmtTime(qElapsed());
+      if (el) { document.getElementById('timer-t').textContent = fmtTime(rem); el.classList.toggle('low', rem <= (s.phase === 'H' ? 60 : 300)); el.hidden = !timerShown(rem); }
+    } else if (el && S.ui && !S.ui.checked) document.getElementById('timer-t').textContent = fmtTime(qElapsed());
   }
   function showQuestion() {
     var s = S.s; S.calc = { open: false, expr: '', res: '' };
@@ -3332,6 +3351,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     else { if (S.view === 'run') S.view = 'start'; h = tabs() + '<main class="wrap">' + VIEWS[S.view]() + '</main>'; }
     app.innerHTML = h + (S.dialog ? dialogHtml() : '');
     Array.prototype.forEach.call(app.querySelectorAll('[data-w]'), function (el) { el.style.width = el.getAttribute('data-w') + '%'; });
+    Array.prototype.forEach.call(app.querySelectorAll('[data-l]'), function (el) { el.style.left = el.getAttribute('data-l') + '%'; });
     if (S.dialog) { var b = document.getElementById('dlg-no'); if (b) b.focus(); return; }
     var el = null; if (key) { try { el = app.querySelector(key); } catch (e) { el = null; } }
     if (el && !el.disabled && el.focus) {
@@ -3378,6 +3398,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
       inp.value = v; u.given[i] = v; if (u === S.ui) syncSubmit(); inp.focus();
     },
     calc: function () { S.calc.open = !S.calc.open; render(); },
+    timerhide: function () { S.timerHidden = !S.timerHidden; LS.set('timerHidden', S.timerHidden); render(); },
     ck: function (el) { calcKey(el.getAttribute('data-k')); },
     democheck: function () { var u = S.demo; if (!E.isComplete(u.q, u.given)) { var f = document.getElementById('demo0'); if (f) f.focus(); return; } u.ok = E.check(u.q, u.given); u.checked = true; render(); },
     demonew: function () { newDemo(); render(); },
@@ -3407,7 +3428,9 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     ev.preventDefault();
     if (ev.target.closest('.demo')) return ACT.democheck();
     var u = S.ui; if (!u || !E.isComplete(u.q, u.given)) return;
-    if (S.s.kind === 'test') submitTest(); else if (!u.checked) checkPractice();
+    // in de toets kun je niet terug: de eerste Enter zet de focus op de knop, pas een tweede Enter gaat door
+    if (S.s.kind === 'test') { var b = document.getElementById('submit'); if (b) b.focus(); }
+    else if (!u.checked) checkPractice();
   });
   // onthoud of de voorbeeldsom open staat, zodat hij na opnieuw tekenen open blijft ('toggle' bubbelt niet: daarom capture)
   document.addEventListener('toggle', function (ev) { var d = ev.target; if (d.classList && d.classList.contains('demo-d')) S.demoOpen = d.open; }, true);
@@ -3436,6 +3459,7 @@ details.acc { border-top: 1px solid var(--line); } details.acc > summary { curso
     S.wiped = +LS.get('wiped') || 0; S.history = cleanHist(LS.get('history'), S.wiped);
     var p = LS.get('prac'); if (p && Array.isArray(p.doms)) S.prac = { doms: p.doms.filter(function (d) { return E.DOM[d]; }), part: p.part === 'H' || p.part === 'N' ? p.part : 'HN', level: +p.level || 0, count: p.count === 20 || p.count === 0 ? p.count : 10 };
     var s = LS.get('session'); S.s = s && s.v === 1 && (s.kind === 'test' || s.kind === 'oefen') ? s : null;
+    S.timerHidden = LS.get('timerHidden') === true;
     newDemo(); S.view = viewFromHash();
     render();
   }
